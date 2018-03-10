@@ -1,0 +1,60 @@
+//后台管理系统底模板
+extends layout
+block body
+    script(src="/js/admin.js",type="text/javascript")
+
+    //头部
+    header.am-topbar.am-topbar-inverse
+        h1.am-topbar-brand
+            a("href=/admin") 华尔街金融数据管理系统
+        div.am-collapse.am-topbar-collapse#topbar-collapse
+            ul.am-nav.am-nav-pills.am-topbar-nav.admin-header-list
+                li.am-hide-sm-only(style="float:right")
+                    a(href="javascript:;")#admin-fullscreen
+                        span.am-icon-arrows-alt &nbsp;
+                        span.admin-fulltext 开启全屏
+                li
+                    a(href="/admin/logout") 退出
+
+    //左部菜单栏
+    div.am-cf.admin-main
+        div.admin-sidebar.admin-main.nav-navicon
+            div.sideMenu(style="color:#aeb2b7;margin:10px 0 0 0;") <i class="am-icon-dashboard">&nbsp;</i> 欢迎华尔街管理员：#{admin.username}
+            div.sideMenu
+                //分类：诸如期货，股票，实体商品
+                h3
+                    i.am-icon-flag &nbsp;
+                    a(href="#") 分类管理
+                ul
+                    li.func
+                        a(href="/admin/cate/list") 分类列表
+
+                //分类下级，具体到某个商品，比如黄金，某只股票，某件淘宝日用品
+                h3
+                    i.am-icon-cart-plus &nbsp;
+                    a(href="#") 商品管理
+                ul
+
+                //商品详细数据，跨度为时间
+                h3
+                    i.am-icon-database &nbsp;
+                    a(href="#") 数据管理
+                ul
+
+                //用户(管理员)管理
+                h3
+                    i.am-icon-users &nbsp;
+                    a(href="#") 用户管理
+                ul
+
+    //管理页
+    div.admin-content
+        div.admin
+            div.admin-index
+                //内容模块
+                block div
+
+            div.foods
+                ul MIT开放协议 devilyouwei 2018
+                dl
+                    a.am-icon-btn.am-icon-arrow-up(title="返回头部" href="")

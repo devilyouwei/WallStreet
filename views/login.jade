@@ -1,0 +1,18 @@
+extends layout
+block body
+    div.am-g.myapp-login
+        div.myapp-login-bg
+            div.myapp-login-logo
+                i.am-icon-stumbleupon
+            h1.myapp-title.am-margin-top-sm 华尔街数据分析系统后台
+            div.am-u-sm-10.myapp-login-form
+                form.am-form(action="/login",method="post")
+                    fieldset
+                        div.am-form-group
+                            input#username(name="username",placeholder="输入管理员用户名",type="text")
+                        div.am-form-group
+                            input#password(name="password",placeholder="输入密码",type="password")
+                        p
+                            button(type="submit",class="am-btn am-btn-default") Login
+
+    script(src="/js/login.js",type="text/javascript")

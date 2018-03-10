@@ -1,0 +1,27 @@
+extends admin
+block div
+    div.am-panel.am-panel-primary.am-margin
+        div.am-panel-hd
+            h3.am-panel-title 分类列表
+        div.am-panel-bd
+            a.am-btn.am-btn-primary(href="/admin/cate/add") 
+                i.am-icon.am-icon-plus &nbsp;
+                | 新增
+        table.am-table
+            thead
+                tr
+                    th 类别名
+                    th API
+                    th API地址
+                    th 操作
+            tbody
+                each item in cates
+                    tr
+                        td= item.name
+                        td= item.api_name
+                        td= item.api_url
+                        td
+                            a(href="xxx").am-btn.am-btn-warning.am-btn-xs 编辑
+                            a(href="/admin/cate/del/#{item.id}").am-btn.am-btn-danger.am-btn-xs 删除
+
+

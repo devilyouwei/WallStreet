@@ -1,0 +1,17 @@
+{
+    "name":"WallStreet",
+    "description":"a software to comprehend Big financial data",
+    "version":"0.0.1",
+    "dependencies":{
+        "express":"latest",
+        "mysql":"latest",
+        "jade":"latest",
+        "md5":"latest",
+        "express-session":"latest",
+        "cookie-parser":"latest",
+        "superagent":"latest",
+        "formidable":"latest",
+        "htmlspecialchars":"latest",
+        "trim":"latest"
+    }
+}
