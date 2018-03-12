@@ -39,12 +39,20 @@ app.get("/admin",Filter.sessionAuth,Admin.admin);
 app.get("/admin/cate/list",Filter.sessionAuth,Admin.cate_list);
 app.get("/admin/cate/add",Filter.sessionAuth,Admin.cate_add);
 app.get("/admin/cate/del/:id",Filter.sessionAuth,Admin.cate_del);
+app.get("/admin/goods/list",Filter.sessionAuth,Admin.goods_list);
+app.get("/admin/goods/add",Filter.sessionAuth,Admin.goods_add);
+app.get("/admin/goods/del/:id",Filter.sessionAuth,Admin.goods_del);
+app.get("/admin/users/list",Filter.sessionAuth,Admin.users_list);
+app.get("/admin/users/add",Filter.sessionAuth,Admin.users_add);
+app.get("/admin/users/del/:id",Filter.sessionAuth,Admin.users_del);
 app.get("/admin/logout",Filter.sessionAuth,Admin.logout);
 
 
 //post请求
 app.post("/login",Login.login);
 app.post("/admin/cate/add",Filter.sessionAuth,Admin.cate_add);
+app.post("/admin/goods/add",Filter.sessionAuth,Admin.goods_add);
+app.post("/admin/users/add",Filter.sessionAuth,Admin.users_add);
 
 //启动服务：监听3000端口
 app.listen(3000);

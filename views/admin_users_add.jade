@@ -1,0 +1,17 @@
+extends admin
+block div
+    div.am-padding
+        h1.am-text-center 新增用户
+        form.am-form.am-form-horizontal#user_add_form(action="/admin/users/add",method="post")
+            div.am-form-group
+                label(for="username").am-u-sm-2.am-form-label 用户名
+                div.am-u-sm-10
+                    input(type="text" id="username" name="username" placeholder="用户名")
+            div.am-form-group
+                label(for="password").am-u-sm-2.am-form-label 密码
+                div.am-u-sm-10
+                    input(type="text" id="password" name="password" placeholder="密码")
+
+            div.am-form-group
+                div.am-u-sm-10.am-u-sm-offset-2
+                    button.am-btn.am-btn-primary.am-btn-block(type="submit") 提交

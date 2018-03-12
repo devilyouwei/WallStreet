@@ -1,0 +1,34 @@
+extends admin
+block div
+    div.am-panel.am-panel-primary.am-margin
+        div.am-panel-hd
+            h3.am-panel-ttile 商品列表
+        div.am-panel-bd
+            a.am-btn.am-btn-primary(href="/admin/goods/add")
+                i.am-icon.am-icon-plus &nbsp;
+                | 新增
+        div.am-tabs(data-am-tabs) 
+            ul.am-tabs-nav.am-nav.am-nav-tabs
+                each item in cate
+                    li
+                        a(href="#tab#{item.id}")= item.name
+            div.am-tabs-bd
+                each item1 in cate
+                    div.am-tab-panel.am-fade(id="tab#{item1.id}")
+                        table.am-table
+                            thead
+                                tr
+                                    th 编号
+                                    th 商品名
+                                    th API_ID
+                                    th 操作
+                            tbody
+                                each item2 in goods
+                                    if item2.c_id == item1.id
+                                        tr
+                                            td= item2.id
+                                            td= item2.name
+                                            td= item2.api_id
+                                            td
+                                                button(href="#").am-btn.am-btn-warning.am-btn-xs 编辑
+                                                button(href="/admin/goods/del/#{item2.id}" type="button").del_goods_btn.am-btn.am-btn-danger.am-btn-xs 删除

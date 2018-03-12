@@ -33,17 +33,20 @@ function  dologin(req,res){
         let password = trim(htmlspecialchars(fields.password));
         if(!username || username=="") return res.json({status:0,msg:"用户名不得为空！"});
         if(!password || password=="") return res.json({status:0,msg:"密码不得为空！"});
+
         auth(username,md5(password)).then(function(id){
             if(id){
                 //再次读取出具库获取admin个人信息，并存储到session
                 const sql = "select * from admins where id=?";
-                query(sql,id,function(err,results,field){
-                    req.session.admin = results[0];
-                    res.json({status:1,msg:"登陆成功"});
-                });
+                return query(sql,id);
             }
             else
-                res.json({status:0,msg:"登录失败，账号密码错误！"});
+                return Promise.reject(id);
+        }).then(results=>{
+            req.session.admin = results[0];
+            res.json({status:1,msg:"登陆成功"});
+        }).catch(id=>{
+            res.json({status:0,msg:"登录失败，账号密码错误！"});
         });
     });
 };
@@ -52,14 +55,10 @@ function  dologin(req,res){
 //验证
 //需要异步执行
 function auth(username,password){ 
-
     const sql = "select id from admins where username=? and password=?";
 
     return new Promise(function(resolve,reject){
-        query(sql,[username,password],function(err,results,fields){
-            if(err)
-                throw new Error(err);
-
+        query(sql,[username,password]).then(results=>{
             //未查询到返回0
             if(results.length==0)
                 resolve(0);

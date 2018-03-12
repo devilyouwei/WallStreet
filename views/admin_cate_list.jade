@@ -10,6 +10,7 @@ block div
         table.am-table
             thead
                 tr
+                    th 编号
                     th 类别名
                     th API
                     th API地址
@@ -17,11 +18,12 @@ block div
             tbody
                 each item in cates
                     tr
+                        td= item.id
                         td= item.name
                         td= item.api_name
                         td= item.api_url
                         td
-                            a(href="xxx").am-btn.am-btn-warning.am-btn-xs 编辑
-                            a(href="/admin/cate/del/#{item.id}").am-btn.am-btn-danger.am-btn-xs 删除
+                            button(href="#").am-btn.am-btn-warning.am-btn-xs 编辑
+                            button(href="/admin/cate/del/#{item.id}",type="button").del_cate_btn.am-btn.am-btn-danger.am-btn-xs 删除
 
 

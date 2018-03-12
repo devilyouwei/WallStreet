@@ -1,0 +1,25 @@
+extends admin
+block div
+    div.am-panel.am-panel-primary.am-margin
+        div.am-panel-hd
+            h3.am-panel-title 用户列表
+        div.am-panel-bd
+            a.am-btn.am-btn-primary(href="/admin/users/add") 
+                i.am-icon.am-icon-plus &nbsp;
+                | 新增
+        table.am-table
+            thead
+                tr
+                    th 编号
+                    th 用户名
+                    th 操作
+            tbody
+                each item in users
+                    tr
+                        td= item.id
+                        td= item.username
+                        td
+                            if item.username != "root"
+                                button(href="/admin/users/del/#{item.id}",type="button").del_user_btn.am-btn.am-btn-danger.am-btn-xs 删除
+
+

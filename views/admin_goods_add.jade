@@ -1,0 +1,23 @@
+extends admin
+block div
+    div.am-padding
+        h1.am-text-center 新增商品
+        form.am-form.am-form-horizontal#goods_add_form(action="/admin/goods/add",method="post")
+            div.am-form-group
+                label(for="name").am-u-sm-2.am-form-label 商品名
+                div.am-u-sm-10
+                    input(type="text" id="name" name="name" placeholder="输入分类名称")
+            div.am-form-group
+                label(for="api_name").am-u-sm-2.am-form-label 所属分类
+                div.am-u-sm-10
+                    select#c_id(name="c_id").am-select
+                        each item in cates
+                            option(value="#{item.id}")= item.name
+            div.am-form-group
+                label(for="api_id").am-u-sm-2.am-form-label 商品API ID
+                div.am-u-sm-10
+                    input(type="text" id="api_id" name="api_id" placeholder="输入API ID")
+
+            div.am-form-group
+                div.am-u-sm-10.am-u-sm-offset-2
+                    button.am-btn.am-btn-primary.am-btn-block(type="submit") 提交

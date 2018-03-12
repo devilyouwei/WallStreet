@@ -1,4 +1,5 @@
 $(function(){
+
     $(".sideMenu").slide({
         titCell:"h3", //鼠标触发对象
         targetCell:"ul", //与titCell一一对应，第n个titCell控制第n个targetCell的显示隐藏
@@ -10,27 +11,43 @@ $(function(){
 
     });
 
-    $("#cate_add_form").on("submit",function(){
-        let post={
-            name:$.trim($("#name").val()),
-            api_name:$.trim($("#api_name").val()),
-            api_url:$.trim($("#api_url").val())
-        }
-        let $form = $(this);
-        let action = $form.attr("action");
-        $.post("/admin/cate/add",post,function(res){
-            var alert = `
-            <div class="am-alert am-alert-danger" data-am-alert>
-                <button type="button" class="am-close">&times;</button>
-                <p>${res.msg}</p>
-            </div>
-            `
-            if(res.status==1){
-                location.href="/admin/cate/list";
-            }else{
-                $form.prepend(alert);
-            }
-        });
-        return false;
-    });
+    $("#cate_add_form").on("submit",submit_add_form);
+    $("#goods_add_form").on("submit",submit_add_form);
+    $("#user_add_form").on("submit",submit_add_form);
+
+    $(".del_cate_btn").on("click",del_func);
+    $(".del_goods_btn").on("click",del_func);
+    $(".del_user_btn").on("click",del_func);
 })
+
+//添加项
+function submit_add_form(){
+    let $form = $(this);
+    let params=$form.serializeArray();
+    let post = {};
+    for(i in params)
+        post[params[i].name] = params[i].value;
+
+    let action = $form.attr("action");
+    $.post(action,post,function(res){
+        let alert = `<div class="am-alert am-alert-danger" data-am-alert> <button type="button" class="am-close">&times;</button> <p>${res.msg}</p> </div>`
+        if(res.status==1){
+            location.href=res.jump;
+        }else{
+            $form.prepend(alert);
+        }
+    });
+    return false;
+}
+//删除项
+function del_func(){
+    let href = $(this).attr("href");
+    $.get(href,function(res){
+        if(res.status == 0){
+            let alert = `<div class="am-alert am-alert-danger" data-am-alert> <button type="button" class="am-close">&times;</button> <p>${res.msg}</p> </div>`
+            $(".am-panel-bd").append(alert);
+        }else{
+            location.href=res.jump;
+        }
+    });
+}
