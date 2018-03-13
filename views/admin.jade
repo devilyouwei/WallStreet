@@ -3,6 +3,12 @@ extends layout
 block body
     script(src="/js/admin.js",type="text/javascript")
 
+    div(tabindex="-1").am-modal.am-modal-loading.am-modal-no-btn#spidering-modal
+        div.am-modal-dialog
+            div.am-modal-hd 正在爬取大数据
+            div.am-modal-bd
+                span.am-icon-spinner.am-icon-spin
+
     //头部
     header.am-topbar.am-topbar-inverse
         h1.am-topbar-brand
@@ -42,6 +48,8 @@ block body
                     i.am-icon-database &nbsp;
                     a(href="#") 数据管理
                 ul
+                    li.func
+                        a(href="/admin/data/spider") 爬虫
 
                 //用户(管理员)管理
                 h3

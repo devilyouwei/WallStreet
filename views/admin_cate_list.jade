@@ -4,7 +4,7 @@ block div
         div.am-panel-hd
             h3.am-panel-title 分类列表
         div.am-panel-bd
-            a.am-btn.am-btn-primary(href="/admin/cate/add") 
+            a.am-btn.am-btn-primary(href="/admin/cate/add/0") 
                 i.am-icon.am-icon-plus &nbsp;
                 | 新增
         table.am-table
@@ -23,7 +23,7 @@ block div
                         td= item.api_name
                         td= item.api_url
                         td
-                            button(href="#").am-btn.am-btn-warning.am-btn-xs 编辑
+                            a(href="/admin/cate/add/#{item.id}").am-btn.am-btn-warning.am-btn-xs 编辑
                             button(href="/admin/cate/del/#{item.id}",type="button").del_cate_btn.am-btn.am-btn-danger.am-btn-xs 删除
 
 

@@ -23,6 +23,30 @@ let getGoods = function(){
     });
 } 
 
+Date.prototype.format = function(fmt) { 
+    var o = { 
+        "M+" : this.getMonth()+1,                 //月份 
+        "d+" : this.getDate(),                    //日 
+        "h+" : this.getHours(),                   //小时 
+        "m+" : this.getMinutes(),                 //分 
+        "s+" : this.getSeconds(),                 //秒 
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+        "S"  : this.getMilliseconds()             //毫秒 
+    }; 
+    if(/(y+)/.test(fmt)) {
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+
+    }
+    for(var k in o) {
+        if(new RegExp("("+ k +")").test(fmt)){
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+
+        }
+
+    }
+    return fmt; 
+}
+
 class Admin{
 
     static admin(req,res){
@@ -48,25 +72,61 @@ class Admin{
     static cate_add(req,res,next){
         res.locals.page_title = "华尔街-新增分类";
         res.locals.admin = req.session.admin;
+        let edit = {
+            id:0,
+            name:"",
+            api_name:"",
+            api_url:"",
+            spider_url:""
+        }
         if(req.method=="GET"){
-            res.render("admin_cate_add");
+            let id = parseInt(req.params.id);
+            //当前端传来id表示当前为编辑模式，读取数据库
+            if(id){
+                const sql = "select * from cate where id=?";
+                query(sql,id).then(results=>{
+                    if(results.length>0){
+                        res.render("admin_cate_add",{edit:results[0]});
+                    }else{
+                        res.render("admin_cate_add",{edit:edit});
+                    }
+                });
+            }else{
+                res.render("admin_cate_add",{edit:edit});
+            }
         }else if(req.method=="POST"){
             let form = new formidable.IncomingForm();
             form.parse(req,(err,fields)=>{
-                fields.name = trim(htmlspecialchars(fields.name));
-                fields.api_name = trim(htmlspecialchars(fields.api_name));
-                fields.api_url = trim(htmlspecialchars(fields.api_url));
-                if(!fields.name) return res.json({status:0,msg:"分类名不得为空"});
-                if(!fields.api_name) return res.json({status:0,msg:"API名不得为空"});
-                if(!fields.api_url) return res.json({status:0,msg:"API路径不得为空"});
+                let edit_id = parseInt(fields.edit_id);
+                let insert={};
+                //表单处理
+                insert.name = trim(htmlspecialchars(fields.name));
+                insert.api_name = trim(htmlspecialchars(fields.api_name));
+                insert.api_url = trim(htmlspecialchars(fields.api_url));
+                insert.spider_url = trim(htmlspecialchars(fields.spider_url));
+                if(!insert.name) return res.json({status:0,msg:"分类名不得为空"});
+                if(!insert.api_name) return res.json({status:0,msg:"API名不得为空"});
+                if(!insert.api_url) return res.json({status:0,msg:"API路径不得为空"});
+                if(!insert.spider_url) return res.json({status:0,msg:"爬虫路径不得为空"});
 
-                const sql = "insert into cate set ?";
-                query(sql,fields).then((results)=>{
-                    if(results.affectedRows>0)
-                        return res.json({status:1,msg:"分类已存储",jump:"/admin/cate/list"});
-                    else
-                        return res.json({status:0,msg:"分类未存储"});
-                });
+                //编辑模式
+                if(edit_id){
+                    const sql = "update cate set name=?,api_name=?,api_url=?,spider_url=? where id=?";
+                    query(sql,[insert.name,insert.api_name,insert.api_url,insert.spider_url,edit_id]).then(results=>{
+                        if(results.changedRows>0)
+                            return res.json({status:1,msg:"分类已更新",jump:"/admin/cate/list"});
+                        else
+                            return res.json({status:0,msg:"分类未更新"});
+                    });
+                }else{//新增模式
+                    const sql = "insert into cate set ?";
+                    query(sql,insert).then(results=>{
+                        if(results.affectedRows>0)
+                            return res.json({status:1,msg:"分类已存储",jump:"/admin/cate/list"});
+                        else
+                            return res.json({status:0,msg:"分类未存储"});
+                    });
+                }
             });
         }else{
             next();
@@ -137,7 +197,6 @@ class Admin{
         if(req.method=="GET"){
             let id = req.params.id;
             const sql = "delete from goods where id=?"
-            console.log(id);
             query(sql,id).then((results)=>{
                 if(results.affectedRows>0){
                     return res.json({status:1,msg:"已删除",jump:"/admin/goods/list"});
@@ -201,6 +260,57 @@ class Admin{
             next();
         }
     }
+
+    static async data_spider(req,res,next){
+        res.locals.page_title = "华尔街-爬虫管理";
+        res.locals.admin = req.session.admin;
+        const sql = "select * from cate";
+        let results = await query(sql);
+        for(let i in results){
+            let sql2 = "select count(*) as count from goods where c_id=?"
+            results[i].count_goods = (await query(sql2,results[i].id))[0].count;
+        }
+        res.render("admin_data_spider",{cates:results});
+    }
+
+    static async load_goods(req,res,next){
+        let c_id = parseInt(req.params.id);
+        let results = await query("select * from cate where id=?",c_id);
+        if(results.length==0)
+            res.render("ajax_load/error");
+        let cate = results[0];
+        //根据提交的cate类型分开处理
+        switch(cate.name){
+            case "期货":
+                load_futures(c_id,req,res,next);
+                break;
+            default:
+                //找不到类型则报错页
+                res.render("ajax_load/error");
+                break;
+        }
+    }
 }
 
+//期货
+//读取商品列表以及商品数据量，最近记录，最早记录
+async function load_futures(c_id,req,res,next){
+    let goods = await query("select * from goods where c_id=?",c_id);
+
+    for(let i in goods){
+        let sql1 = "select count(date) as count from futures where g_id=?"
+        goods[i].count = (await query(sql1,goods[i].id))[0].count;
+        if(goods[i].count>0){
+            let sql2 = "select date from futures where g_id=? order by date asc";
+            let dates = await query(sql2,goods[i].id);
+            goods[i].oldest_date = new Date(dates[0].date).format("yyyy-MM-dd");
+            goods[i].newest_date = new Date(dates[dates.length-1].date).format("yyyy-MM-dd");
+        }else{
+            goods[i].oldest_date = "暂无";
+            goods[i].newest_date = "暂无";
+        }
+    }
+    res.render("ajax_load/futures_list",{goods:goods});
+
+}
 module.exports=Admin;

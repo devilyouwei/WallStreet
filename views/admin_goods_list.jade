@@ -2,7 +2,7 @@ extends admin
 block div
     div.am-panel.am-panel-primary.am-margin
         div.am-panel-hd
-            h3.am-panel-ttile 商品列表
+            h3.am-panel-title 商品列表
         div.am-panel-bd
             a.am-btn.am-btn-primary(href="/admin/goods/add")
                 i.am-icon.am-icon-plus &nbsp;
@@ -30,5 +30,5 @@ block div
                                             td= item2.name
                                             td= item2.api_id
                                             td
-                                                button(href="#").am-btn.am-btn-warning.am-btn-xs 编辑
+                                                //button(href="#").am-btn.am-btn-warning.am-btn-xs 编辑
                                                 button(href="/admin/goods/del/#{item2.id}" type="button").del_goods_btn.am-btn.am-btn-danger.am-btn-xs 删除

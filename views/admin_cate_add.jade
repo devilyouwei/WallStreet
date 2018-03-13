@@ -1,21 +1,30 @@
 extends admin
 block div
     div.am-padding
-        h1.am-text-center 新增分类
+        h1.am-text-center 
+            if(edit.id)
+               | 编辑分类
+            else
+               | 新增分类
         form.am-form.am-form-horizontal#cate_add_form(action="/admin/cate/add",method="post")
             div.am-form-group
                 label(for="name").am-u-sm-2.am-form-label 分类名
                 div.am-u-sm-10
-                    input(type="text" id="name" name="name" placeholder="输入分类名称")
+                    input(type="text" id="name" name="name" placeholder="输入分类名称" value="#{edit.name}")
             div.am-form-group
                 label(for="api_name").am-u-sm-2.am-form-label API名
                 div.am-u-sm-10
-                    input(type="text" id="api_name" name="api_name" placeholder="输入API来源名称")
+                    input(type="text" id="api_name" name="api_name" placeholder="输入API来源名称" value="#{edit.api_name}")
             div.am-form-group
                 label(for="api_url").am-u-sm-2.am-form-label API地址
                 div.am-u-sm-10
-                    input(type="text" id="api_url" name="api_url" placeholder="输入API路径")
+                    input(type="text" id="api_url" name="api_url" placeholder="输入API路径" value="#{edit.api_url}")
+            div.am-form-group
+                label(for="spider_url").am-u-sm-2.am-form-label 爬虫地址
+                div.am-u-sm-10
+                    input(type="text" id="spider_url" name="spider_url" placeholder="输入本地爬虫请求路径" value="#{edit.spider_url}")
 
             div.am-form-group
                 div.am-u-sm-10.am-u-sm-offset-2
+                    input(type="hidden",name="edit_id" value="#{edit.id}")
                     button.am-btn.am-btn-primary.am-btn-block(type="submit") 提交

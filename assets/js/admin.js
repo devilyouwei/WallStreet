@@ -18,6 +18,9 @@ $(function(){
     $(".del_cate_btn").on("click",del_func);
     $(".del_goods_btn").on("click",del_func);
     $(".del_user_btn").on("click",del_func);
+
+    $(".spider_btn").on("click",do_spider);
+    $(".ajax_load_btn").on("click",ajax_load)
 })
 
 //添加项
@@ -50,4 +53,27 @@ function del_func(){
             location.href=res.jump;
         }
     });
+}
+
+//爬虫ajax
+function do_spider(){
+    let $btn = $(this);
+    let href = $btn.attr("href");
+    let $modal = $("#spidering-modal");
+    $modal.modal();
+    $.get(href,function(res){
+        $modal.modal("close");
+        if(res.status==1){
+            let alert = `<div class="am-alert am-alert-success" data-am-alert> <button type="button" class="am-close">&times;</button> <p>${res.msg}</p> </div>`
+            $("#cates_cards").prepend(alert);
+        }
+
+    })
+}
+
+//取得数据部分详细的部分页面
+function ajax_load(){
+    let $btn = $(this);
+    let href = $btn.attr("href");
+    $("#data_spider_content").load(href);
 }
