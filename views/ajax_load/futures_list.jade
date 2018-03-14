@@ -1,16 +1,17 @@
-table.am-table.am-table-bordered.am-table-radius.am-table-striped
-    thead
-        tr
-            th 编号
-            th 名称
-            th 数据量
-            th 开始时间
-            th 最终时间
-    tbody
-        each item in goods
+div
+    table.am-table.am-table-bordered.am-table-radius.am-table-striped
+        thead
             tr
-                td=item.id
-                td=item.name
-                td=item.count
-                td=item.oldest_date
-                td=item.newest_date
+                th 编号
+                th 名称
+                th 数据量
+                th 开始时间
+                th 最终时间
+        tbody
+            each item in goods
+                tr
+                    td=item.id
+                    td=item.name
+                    td=item.count
+                    td=item.oldest_date
+                    td=item.newest_date

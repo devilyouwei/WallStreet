@@ -197,7 +197,9 @@ class Admin{
         if(req.method=="GET"){
             let id = req.params.id;
             const sql = "delete from goods where id=?"
-            query(sql,id).then((results)=>{
+
+            //暂时默认为期货
+            query("delete from futures where g_id=?",id).then(query(sql,id)).then((results)=>{
                 if(results.affectedRows>0){
                     return res.json({status:1,msg:"已删除",jump:"/admin/goods/list"});
                 }else{

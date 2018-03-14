@@ -56,7 +56,7 @@ init.spider = app=>{
     //引入爬虫类
     let Futures = require(SPIDER+"Futures");
 
-    app.get("/spider/futures_all",Filter.sessionAuth,Futures.futures_all)
+    app.get("/spider/futures/refresh",Filter.sessionAuth,Futures.refresh);
 }
 
 module.exports = init

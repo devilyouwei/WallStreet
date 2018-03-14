@@ -9,8 +9,7 @@ block div
                         p 商品数: #{item.count_goods}
                         p 数据来源：#{item.api_name}
                         p.am-margin-top
-                            button.am-btn.am-btn-danger.spider_btn.am-btn-xs(href="#{item.spider_url}") 大数据重置
+                            button.am-btn.am-btn-danger.spider_btn.am-btn-xs(href="#{item.spider_url}") 更新数据
                             button.am-btn.am-btn-primary.ajax_load_btn.am-btn-xs(href="/admin/load/goods/#{item.id}") 明细
-                            button.am-btn.am-btn-success.spider_btn.am-btn-xs(href="#{item.spider_url}") 今日更新
 
     div#data_spider_content.am-padding.am-margin-top-lg
