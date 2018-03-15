@@ -1,0 +1,21 @@
+html,body{
+    background:#fff;
+}
+.logo{
+    font-size:400%;
+    position:relative;
+}
+.logo .logo-cn{
+    font-size:30%;
+    position:absolute;
+    bottom:10px;
+}
+.search-logo{
+    position:relative;
+}
+.search-logo-cn{
+    font-size:50%;
+    position:absolute;
+    right:10px;
+    bottom:-15px;
+}

@@ -143,7 +143,7 @@ gallery.html css
 .slideTxtBox .hd ul li.on{height: 30px;color: #ee5950}
 .slideTxtBox .bd ul{padding: 11px 0 0 0;zoom: 1;font-size: 14px}
 .slideTxtBox .bd ul .am-table>tbody>tr>td{border-top: 1px solid #eeeff1}
-.foods{width: 100%;background-color: #5b6e84;height: 43px;float: left;text-align: center;font-size: 12px;line-height: 43px;color: #fff; overflow: hidden;position:absolute;bottom:0;}
+.foods{width: 100%;background-color: #5b6e84;height: 43px;float: left;text-align: center;font-size: 12px;line-height: 43px;color: #fff; overflow: hidden;position:fixed;bottom:0;z-index:100}
 .foods ul{width: 95%;float: left;padding: 0px;margin: 0px}
 .foods dl{width: 5%;float: right;padding: 0px;margin: 0px}
 .foods dl .am-icon-btn{-webkit-box-sizing: border-box;box-sizing: border-box;display: inline-block;width: 23px;height: 23px;font-size: 18px;line-height: 23px;border-radius: 50%;background-color: #acb6c1;color: #555;text-align: center;margin-top: 12px}

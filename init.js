@@ -41,6 +41,7 @@ init.controller = app=>{
     app.get("/admin/data/spider",Filter.sessionAuth,Admin.data_spider);
     app.get("/admin/load/goods/:id",Filter.sessionAuth,Admin.load_goods);
     app.get("/admin/logout",Filter.sessionAuth,Admin.logout);
+    app.get("/search",Index.search);
 
 
     //post请求

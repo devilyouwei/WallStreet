@@ -1,10 +1,30 @@
 extends layout
 block body
-    if(authenticated)
-        p Welcome back,#{username}
-        a(href="/logout") Logout
-    else
-        p Welcome new visitor!
-        ul
-            li: a(href="/login") Login
-            li: a(href="/register") register
+    script(type="text/javascript",src='/js/index.js')
+    link(type="text/css",rel="stylesheet",href='/css/index.css')
+
+    div.am-container
+        h1.am-text-center.am-margin-top-xl.logo 
+            font.am-text-primary W
+            font.am-text-danger a
+            font.am-text-warning l
+            font.am-text-warning l
+            font.am-text-primary S
+            font.am-text-success t
+            font.am-text-warning r
+            font.am-text-danger e
+            font.am-text-danger e
+            font.am-text-success t
+            span.logo-cn.am-text-primary 华尔街
+
+        form(name="search_goods" action="/search" method="GET").am-form
+            div.am-input-group
+                input.am-form-field(type="text",placeholder="输入商品名",name="g_name")
+                span.am-input-group-btn
+                    button.am-btn.am-btn-primary(type="submit") 手气还行
+
+            div.cate-select.am-margin-top.am-btn-group(data-am-button)
+                each cate in cates
+                    label.am-btn.am-btn-default.am-btn-xs
+                        input(type="radio",name="c_id",value="#{cate.id}")
+                        |#{cate.name}

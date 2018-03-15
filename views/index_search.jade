@@ -1,0 +1,22 @@
+extends layout
+block body
+    script(type="text/javascript",src='/js/index.js')
+    link(type="text/css",rel="stylesheet",href='/css/index.css')
+    header.am-topbar
+        h1.am-topbar-brand.search-logo
+            a(href="/")
+                font.am-text-primary W
+                font.am-text-danger a
+                font.am-text-warning l
+                font.am-text-warning l
+                font.am-text-primary S
+                font.am-text-success t
+                font.am-text-warning r
+                font.am-text-danger e
+                font.am-text-danger e
+                font.am-text-success t
+                span.search-logo-cn.am-text-primary 华尔街
+
+        form.am-topbar-form.am-topbar-left.am-form-inline(role="search",action="/search",method="GET")
+            div.am-form-group
+                input(type="text",placeholder="搜索更多",name="g_name",value="#{search}").am-form-field.am-input-sm
