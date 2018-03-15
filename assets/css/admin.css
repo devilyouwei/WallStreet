@@ -312,3 +312,6 @@ form .form-group:last-child{padding-bottom:0;}
     border:solid 1px #ccc;
     text-align:center;
 }
+.am-table{
+    margin-bottom: 100px;
+}

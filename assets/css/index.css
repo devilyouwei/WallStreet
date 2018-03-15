@@ -19,3 +19,7 @@ html,body{
     right:10px;
     bottom:-15px;
 }
+.c-container{
+    width: 538px;
+    word-wrap: break-word;
+}

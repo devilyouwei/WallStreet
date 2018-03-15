@@ -1,5 +1,6 @@
 let query = require("../query.js");
 let formidable = require("formidable")
+require("./Date.js");
 
 class Index{
 
@@ -15,10 +16,21 @@ class Index{
         let g_name =  req.query.g_name;
         res.locals.page_title = "华尔街-搜索："+g_name;
         let c_id =  parseInt(req.query.c_id);
-        let sql = `select * from goods where name LIKE '%${g_name}%'`;
+        let sql = `select * from good_cate where name LIKE '%${g_name}%'`;
         if(c_id)
             sql+=`and c_id=${c_id}`;
         let results = await query(sql);
+        for(let i in results){
+            switch(results[i].cate){
+                case "期货": //目前只有期货数据
+                    sql = "select * from futures where g_id=? order by date desc limit 1";
+                    results[i].latest_data = (await query(sql,results[i].id))[0];
+                    results[i].latest_data.date=new Date(results[i].latest_data.date).format("yyyy-MM-dd");
+                    break;
+                default:
+                    break;
+            }
+        }
         res.render("index_search",{goods:results,search:g_name});
     }
 }
