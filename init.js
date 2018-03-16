@@ -21,6 +21,7 @@ init.controller = app=>{
     let Index = require(CTRL+"Index"),
         Login = require(CTRL+"Login"),
         Admin = require(CTRL+"Admin"),
+        Futures = require(CTRL+"Futures"),
         Register = require(CTRL+"Register");
 
 
@@ -41,7 +42,10 @@ init.controller = app=>{
     app.get("/admin/data/spider",Filter.sessionAuth,Admin.data_spider);
     app.get("/admin/load/goods/:id",Filter.sessionAuth,Admin.load_goods);
     app.get("/admin/logout",Filter.sessionAuth,Admin.logout);
+    //首页查询
     app.get("/search",Index.search);
+    //期货数据展示
+    app.get("/futures/:id",Futures.index);
 
 
     //post请求

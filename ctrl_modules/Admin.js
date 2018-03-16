@@ -257,7 +257,7 @@ class Admin{
         let c_id = parseInt(req.params.id);
         let results = await query("select * from cate where id=?",c_id);
         if(results.length==0)
-            res.render("ajax_load/error");
+            res.render("load/error");
         let cate = results[0];
         //根据提交的cate类型分开处理
         switch(cate.name){
@@ -266,7 +266,7 @@ class Admin{
                 break;
             default:
                 //找不到类型则报错页
-                res.render("ajax_load/error");
+                res.render("load/error");
                 break;
         }
     }
@@ -290,7 +290,7 @@ async function load_futures(c_id,req,res,next){
             goods[i].newest_date = "暂无";
         }
     }
-    res.render("ajax_load/futures_list",{goods:goods});
+    res.render("load/futures_list",{goods:goods});
 
 }
 module.exports=Admin;

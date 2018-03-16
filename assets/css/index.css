@@ -1,6 +1,12 @@
 html,body{
     background:#fff;
 }
+.index-container{
+    margin:0 auto;
+    margin-top:120px;
+    width:70%;
+    max-width:700px;
+}
 .logo{
     font-size:400%;
     position:relative;

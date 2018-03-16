@@ -1,0 +1,18 @@
+extends layout
+block body
+    link(href="/css/futures.css" rel="stylesheet" type="text/css")
+    
+    script(src="/js/echarts.js",type="text/javascript")
+    div.am-container
+        //标题
+        div.title.am-padding-top-xl
+            h1.am-text-center.am-margin-bottom-0.am-margin-top-lg #{goods.name}&nbsp;#{goods.api_id}
+            h3.am-text-center.am-margin-0.am-text-danger 【#{goods.cate}】
+
+        //内容
+        div.am-g
+            //左部
+            div.am-u-sm-3.left
+
+            //右部可视化数据图
+            div.am-u-sm-9.right

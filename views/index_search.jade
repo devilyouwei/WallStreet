@@ -2,6 +2,7 @@ extends layout
 block body
     script(type="text/javascript",src='/js/index.js')
     link(type="text/css",rel="stylesheet",href='/css/index.css')
+
     header.am-topbar
         h1.am-topbar-brand.search-logo
             a(href="/")
@@ -23,17 +24,10 @@ block body
 
     div.am-container.am-padding-top-lg
         each item in goods
-            div.c-container.am-margin-bottom-xl
-                h3.am-margin-vertical-xs
-                    a(href="" style="text-decoration:underline") #{item.cate}-#{item.name}
-                ul.am-avg-sm-4.am-text-sm
-                    li 开盘价：#{item.latest_data.open_price}
-                    li 最高价：#{item.latest_data.max_price}
-                    li 最低价：#{item.latest_data.min_price}
-                    li 最新价：#{item.latest_data.latest_price}
-                div.am-g.am-g-collapse.am-margin-top-xs
-                    div.am-u-sm-6.am-text-left.am-text-danger 成交量：#{item.latest_data.volume}
-                    div.am-u-sm-6.am-text-right.am-text-primary.am-text-sm #{item.latest_data.date}
-                p.am-text-xs.am-text-primary.am-text-truncate
-                    | 数据来源：#{item.api_name} &nbsp;
-                    a(href="#{item.api_url}?symbol=#{item.api_id}" target="_blank") #{item.api_url}
+            case item.cate
+                when "期货"
+                    include ./index_search_futures_block.jade
+                default
+                    include ./load/error.jade
+
+
