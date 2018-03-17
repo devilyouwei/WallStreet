@@ -46,8 +46,8 @@ init.controller = app=>{
     app.get("/search",Index.search);
     //期货数据展示
     app.get("/futures/:id",Futures.index);
-    //
-    app.get("/futures/data/:id",Futures.data); 
+    //ajax
+    app.get("/futures/data/:id/:limit",Futures.data); 
 
     //post请求
     app.post("/login",Login.login);

@@ -16,9 +16,10 @@ class Futures{
     }
 
     static async data(req,res,next){
-        let g_id = req.params.id;
-        const sql = "select * from futures where g_id=? order by date asc";
-        let data = await query(sql,g_id);
+        let g_id = parseInt(req.params.id);
+        let limit = parseInt(req.params.limit);
+        const sql = "select * from futures where g_id=? order by date desc limit "+limit;
+        let data = (await query(sql,g_id)).reverse();
         for(let i in data){
             data[i].date = new Date(data[i].date).format("yyyy-MM-dd");
         }
