@@ -4,3 +4,13 @@
 .am-margin-bottom-0{
     margin-bottom:0;
 }
+.paint{
+    width:100%;
+    height:600px;
+}
+.chart-container{
+    width:99%;
+    margin:0 auto;
+    min-width:1000px;
+}
+am

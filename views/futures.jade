@@ -5,17 +5,35 @@ block body
     script(src="/js/futures.js",type="text/javascript")
 
     div#good_id.am-hide #{goods.id}
-    div.am-container
+    div.chart-container
         //标题
-        div.title.am-padding-top-xl
-            h1.am-text-center.am-margin-bottom-0.am-margin-top-lg #{goods.name}&nbsp;#{goods.api_id}
+        div.title.am-padding-top
+            h1.am-text-center.am-margin-bottom-0.am-margin-top #{goods.name}&nbsp;#{goods.api_id}
             h3.am-text-center.am-margin-0.am-text-danger 【#{goods.cate}】
 
         //内容
-        div.am-g
+        div.am-g.am-margin-top-lg
             //左部
             div.am-u-sm-3.left
+                ul.am-nav.am-text-right(data-am-sticky,data-am-scrollspynav="{offsetTop: 0}").scrollspy-nav
+                    li
+                        select(data-am-selected)
+                            option 面积图
+                            option K线
+                    li
+                        a(href="#paint-latest") 收盘价
+                    li
+                        a(href="#paint-open") 开盘价
+                    li
+                        a(href="#paint-max-min") 最高-最低价
+                    li
+                        div.am-input-group
+                            label.am-u-sm-5.am-form-label 天数
+                            div.am-u-sm-7
+                                input(type="number" value="10" id="day_num" style="width:100%").am-input
 
             //右部可视化数据图
             div.am-u-sm-9.right
-                div(style="width:600px;height:400px")#paint
+                div#paint-latest.paint
+                div#paint-open.paint.am-margin-top
+                div#paint-max-min.paint.am-margin-top
