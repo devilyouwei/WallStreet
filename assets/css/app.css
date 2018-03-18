@@ -13,3 +13,8 @@
     text-align:center;
     color:#fff;
 }
+.feet{
+    position:fixed;
+    bottom:0;
+    width: 100%;
+}

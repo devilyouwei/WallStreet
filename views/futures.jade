@@ -16,10 +16,13 @@ block body
             //左部
             div.am-u-sm-3.left
                 ul.am-nav.am-text-right(data-am-sticky,data-am-scrollspynav="{offsetTop: 0}").scrollspy-nav
+                    li.am-text-lg #{goods.name}可视化数据
                     li
-                        select(data-am-selected)
-                            option 面积图
-                            option K线
+                        select(data-am-selected)#chart_cate
+                            option(value="area-line") 曲线面积
+                            option(value="area-bar") 柱状面积
+                    li
+                        a(href="#paint-kline") k-线综合
                     li
                         a(href="#paint-latest") 收盘价
                     li
@@ -34,6 +37,7 @@ block body
 
             //右部可视化数据图
             div.am-u-sm-9.right
-                div#paint-latest.paint
-                div#paint-open.paint.am-margin-top
-                div#paint-max-min.paint.am-margin-top
+                div#paint-kline.paint
+                div#paint-latest.paint.am-margin-top-lg
+                div#paint-open.paint.am-margin-top-lg
+                div#paint-max-min.paint.am-margin-top-lg

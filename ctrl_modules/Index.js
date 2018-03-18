@@ -5,9 +5,9 @@ require("./Date.js");
 class Index{
 
     static async index(req,res,next){
+        res.locals.page_title="华尔街-WallStreet";
         const sql = "select * from cate";
         let results = await query(sql);
-        res.locals.page_title="华尔街-首页"
         res.render("index",{cates:results});
     }
 

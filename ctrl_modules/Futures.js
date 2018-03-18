@@ -6,12 +6,13 @@ class Futures{
     static async index(req,res,next){
         let g_id = req.params.id;
         const sql = "select * from good_cate where id=? limit 1";
-        let goods = await query(sql,g_id);
+        let goods = (await query(sql,g_id))[0];
+        res.locals.page_title="可视化数据-"+goods.name;
         //找不到商品返回主页
         if(goods.length == 0){
             return res.redirect("/");
         }else{
-            res.render("futures",{goods:goods[0]});
+            res.render("futures",{goods:goods});
         }
     }
 

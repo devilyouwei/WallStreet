@@ -1,59 +1,82 @@
 $(function(){
-
-    var dom1=document.getElementById("paint-latest");
-    var dom2=document.getElementById("paint-open");
-    var dom3=document.getElementById("paint-max-min");
+    let dom0=document.getElementById("paint-kline");
+    let dom1=document.getElementById("paint-latest");
+    let dom2=document.getElementById("paint-open");
+    let dom3=document.getElementById("paint-max-min");
+    let chart0 = echarts.init(dom0,'light');
     let chart1 = echarts.init(dom1,'light');
     let chart2 = echarts.init(dom2,'light');
     let chart3 = echarts.init(dom3,'light');
-
-    $g_id = $("#good_id").text();
-    //init 10 rows
-    init_data_paint($g_id,10);
-    //获取商品数据，构建走势图
-    $("#day_num").on("change",function(){
-        let $limit = $(this).val();
-        init_data_paint($g_id,$limit);
+    let $chart_cate = $("#chart_cate");
+    let $limit = $("#day_num");
+    //g_id在同一個商品頁面中不變
+    let $g_id = $("#good_id").text();
+    let $g_name = $("h1.am-text-center").text();
+    //默認檢索十天数据
+    init_data_paint($g_id,10,$chart_cate.val());
+    //修改限制条数
+    $limit.on("change",function(){
+        init_data_paint($g_id,$limit.val(),$chart_cate.val());
+    });
+    //修改图类型
+    $chart_cate.on("change",function(){
+        init_data_paint($g_id,$limit.val(),$chart_cate.val());
     });
 
     //请求加载数据
-    function init_data_paint(g_id,limit){
+    function init_data_paint(g_id,limit,chart){
+        chart0.showLoading();
         chart1.showLoading();
         chart2.showLoading();
         chart3.showLoading();
         $.get("/futures/data/"+g_id+"/"+limit,function(res){
+            chart0.hideLoading();
             chart1.hideLoading();
             chart2.hideLoading();
             chart3.hideLoading();
             if(res.status == 0){
                 $(".right").html("<h1 class='am-text-danger'>"+res.msg+"</h1>")
             }else{
-                var data = res.data;
+                let data = res.data;
                 //初始化数据
-                var open_price = [];
-                var min_price = [];
-                var max_price = [];
-                var latest_price = [];
-                var date = [];
+                let open_price = [];
+                let min_price = [];
+                let max_price = [];
+                let latest_price = [];
+                let date = [];
+                let volume = [];//交易量
                 for(let i in data){
-                    if(data[i].open_price==0 || data[i].min_price==0 || data[i].max_price==0 || data[i].latest_price==0)
+                    if(data[i].open_price==0 || data[i].min_price==0 || data[i].max_price==0 || data[i].latest_price==0 || data[i].volume==0)
                         continue;
                     open_price.push(data[i].open_price);
                     min_price.push(data[i].min_price);
                     max_price.push(data[i].max_price);
                     latest_price.push(data[i].latest_price);
                     date.push(data[i].date);
+                    volume.push(data[i].volume);
                 }
-                paint_area_line(date,latest_price,chart1,"收盘价");
-                paint_area_line(date,open_price,chart2,"开盘价");
-                paint_line(date,[{title:"最低价",data:min_price},{title:"最高价",data:max_price}],chart3,"最低-最高价");
+                //综合k线
+                paint_kline(chart0,date,open_price,latest_price,min_price,max_price,$g_name);
+                switch(chart){
+                    case "area-line":
+                        paint_area_line(date,latest_price,chart1,"收盘价");
+                        paint_area_line(date,open_price,chart2,"开盘价");
+                        break;
+                    case "area-bar":
+                        paint_area_bar(date,latest_price,chart1,"收盘价");
+                        paint_area_bar(date,open_price,chart2,"开盘价");
+                        break;
+                    default:break;
+                }
+                //最低最高折线
+                paint_line(date,[{title:"最低价",data:min_price},{title:"最高价",data:max_price},{title:"交易量",data:volume}],chart3,"最低-最高价");
             }
         });
     }
 
     //绘制大数据曲线面积图
     function paint_area_line(xdata,ydata,chart,title){
-        option = {
+        let option = {
             tooltip: {
                 trigger: 'axis',
                 position: function (pt) {
@@ -63,7 +86,6 @@ $(function(){
             title: {
                 left: 'center',
                 text: title,
-
             },
             xAxis: {
                 type: 'category',
@@ -81,8 +103,6 @@ $(function(){
             }, {
                 start: 0,
                 end: 10,
-                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-                handleSize: '80%',
                 handleStyle: {
                     color: '#fff',
                     shadowBlur: 3,
@@ -90,10 +110,8 @@ $(function(){
                     shadowOffsetX: 2,
                     shadowOffsetY: 2
                 }
-
             }],
         };
-
         option.series = [
             {
                 name:title,
@@ -105,19 +123,16 @@ $(function(){
                     normal: {
                         color: 'rgb(255, 70, 131)'
                     }
-
                 },
                 areaStyle: {
                     normal: {
                         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                             offset: 0,
                             color: 'rgb(255, 158, 68)'
-
                         }, {
                             offset: 1,
                             color: 'rgb(255, 70, 131)'
                         }])
-
                     }
                 },
                 data: ydata
@@ -127,8 +142,49 @@ $(function(){
         chart.setOption(option,true);
     }
 
+    //柱状图
+    function paint_area_bar(xdata,ydata,chart,title){
+        let option = {
+            title: {
+                text: title
+            },
+            legend: {
+                data: [title],
+                align: 'right'
+            },
+            tooltip:{
+
+            },
+            xAxis: {
+                data: xdata,
+                silent: false,
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                scale:true,
+            },
+            series: [{
+                name: title,
+                type: 'bar',
+                data: ydata,
+                animationDelay: function (idx) {
+                    return idx * 10;
+                }
+            }],
+            animationEasing: 'elasticOut',
+            animationDelayUpdate: function (idx) {
+                return idx * 5;
+            }
+        };
+        chart.clear();
+        chart.setOption(option,true);
+    }
+
+    //普通折线图
     function paint_line(xdata,ydata,chart,title){
-        option = {
+        let option = {
             title: {
                 text: title,
                 left: 'center',
@@ -141,59 +197,131 @@ $(function(){
                 {
                     type : 'category',
                     boundaryGap : false,
+                    scale:true,
                     data:xdata
                 }
             ],
             yAxis : [
                 {
                     type : 'value',
-                    scale:true
+                    name : '价位',
+                    position:'left',
+                    scale:true,
+                },{
+                    type:'value',
+                    name:'交易量',
+                    position:'right',
+                    scale:true,
                 }
-
             ],
             dataZoom: [{
                 type: 'inside',
                 start: 0,
                 end: 100
-
             }, {
                 start: 0,
                 end: 10,
-                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-                handleSize: '80%',
                 handleStyle: {
                     color: '#fff',
                     shadowBlur: 3,
                     shadowColor: 'rgba(0, 0, 0, 0.6)',
                     shadowOffsetX: 2,
                     shadowOffsetY: 2
-
                 }
-
             }],
         };
-
         let legend_data = [];
         for(let y of ydata){
             legend_data.push(y.title);
         }
-
         option.legend={
             data:legend_data,
             left:"right"
         } 
-        option.series = function(){
-            let series = [];
-            for(y of ydata){
-                series.push({
-                    name:y.title,
-                    type:"line",
-                    data:y.data
-                });
+        option.series=[];
+        option.series.push({
+            name:ydata[0].title,
+            type:"line",
+            data:ydata[0].data
+        });
+        option.series.push({
+            name:ydata[1].title,
+            type:"line",
+            data:ydata[1].data
+        });
+        option.series.push({
+            name:ydata[2].title,
+            type:"bar",
+            barMaxWidth:20,
+            yAxisIndex: 1,
+            data:ydata[2].data,
+            itemStyle:{
+                opacity:0.5
             }
-            return series;
-        }();
+        });
         chart.clear();
         chart.setOption(option,true);
+    }
+
+    //k线图
+    function paint_kline(chart,date,open,latest,min,max,title){
+        //二维数组
+        let data=[];
+        for(let i in date){
+            //开盘，收盘，最低，最高
+            let data2=[open[i],latest[i],min[i],max[i]];
+            data[i] = data2;
+        }
+
+        let option = {
+            title : {
+                text: title,
+                left:"center",
+            },
+            tooltip : {
+                trigger: 'axis',
+                formatter: function (params) {
+                    var res = params[0].seriesName + ' ' + params[0].name;
+                    res += '<br/>  开盘 : ' + params[0].value[1] + '  最高 : ' + params[0].value[4];
+                    res += '<br/>  收盘 : ' + params[0].value[2] + '  最低 : ' + params[0].value[3];
+                    return res;
+                }
+            },
+            legend: {
+                data:[title],
+                left:"right"
+            },
+            dataZoom : {
+                show : true,
+                realtime: true,
+                start : 0,
+                end : 100
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : true,
+                    axisTick: {onGap:false},
+                    splitLine: {show:false},
+                    data : date
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    scale:true,
+                    boundaryGap: [0.01, 0.01]
+                }
+            ],
+            series : [
+                {
+                    name:title,
+                    type:'k',
+                    data: data// 开盘，收盘，最低，最高
+                }
+            ]
+        };
+        chart.clear();
+        chart.setOption(option);
     }
 });
