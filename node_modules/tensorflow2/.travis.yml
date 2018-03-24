@@ -1,0 +1,21 @@
+dist: trusty
+sudo: false
+language: node_js
+node_js:
+  - "8.1.2"
+env:
+  - CXX=g++-4.8
+    NODE_ENV=test
+    LIBRARY_PATH=$PWD/tensorflow/lib:$LIBRARY_PATH
+    LD_LIBRARY_PATH=$PWD/tensorflow/lib:$LD_LIBRARY_PATH
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+install:
+  - npm install
+script:
+  - echo $LD_LIBRARY_PATH
+  - npm test
