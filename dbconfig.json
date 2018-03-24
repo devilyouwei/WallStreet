@@ -1,6 +1,6 @@
 {
     "host"     : "localhost",
     "user"     : "root",
-    "password" : "25",
+    "password" : "",
     "database" : "wallstreet"
 }

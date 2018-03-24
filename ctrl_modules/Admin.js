@@ -8,7 +8,7 @@ require("./Date.js");
 //必须使用对象工厂函数，每次请求都要新建promise对象，否则类中static方法将导致导致数据未刷新
 let getCate = function(){
     return new Promise(function(resolve,reject){
-        const sql = "select * from cate";
+        const sql = "select * from cate order by id asc";
         query(sql).then((results)=>{
             resolve(results);
         });
@@ -17,7 +17,7 @@ let getCate = function(){
 
 let getGoods = function(){
     return new Promise(function(resolve,reject){
-        const sql = "select * from goods";
+        const sql = "select * from goods order by id asc";
         query(sql).then((results)=>{
             resolve(results);
         });

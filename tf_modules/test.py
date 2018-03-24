@@ -1,7 +1,17 @@
-#!/usr/bin/python3
 import tensorflow as tf
-import os
 
-v = tf.Variable(1000, name='my_variable')
+hello = tf.constant('Hello, TensorFlow!')
 sess = tf.Session()
-tf.train.write_graph(sess.graph_def,'./','graph.pb',as_text=False)
+print sess.run(hello)
+
+a = tf.constant(10)
+b = tf.constant(32)
+print sess.run(a+b)
+
+matrix1 = tf.constant([[3., 3.]])
+matrix2 = tf.constant([[2.],[2.]])
+product = tf.matmul(matrix1, matrix2)
+result = sess.run(product)
+print result
+
+sess.close()

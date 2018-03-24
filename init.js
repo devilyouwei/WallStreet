@@ -14,15 +14,14 @@ const SPIDER = __dirname+"/spider_modules/";
 let init = {}
 
 //初始化控制器与路由
-init.controller = app=>{
+init.controller = function(app){
     //引入过滤器类
     let Filter = require(CTRL+"Filter");
     //引入控制器类
     let Index = require(CTRL+"Index"),
         Login = require(CTRL+"Login"),
         Admin = require(CTRL+"Admin"),
-        Futures = require(CTRL+"Futures"),
-        Register = require(CTRL+"Register");
+        Futures = require(CTRL+"Futures");
 
 
     //加载路由与控制器
@@ -56,7 +55,7 @@ init.controller = app=>{
     app.post("/admin/users/add",Filter.sessionAuth,Admin.users_add);
 }
 
-init.spider = app=>{
+init.spider = function(app){
     //引入过滤器类
     let Filter = require(CTRL+"Filter");
     //引入爬虫类
@@ -65,4 +64,4 @@ init.spider = app=>{
     app.get("/spider/futures/refresh",Filter.sessionAuth,Futures.refresh);
 }
 
-module.exports = init
+module.exports=init;
