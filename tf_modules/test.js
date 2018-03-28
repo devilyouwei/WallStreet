@@ -1,3 +1,5 @@
+'use strict';
+ 
 const tf = require('tensorflow2');
 const graph = tf.graph();
  
@@ -6,7 +8,4 @@ const w = graph.variable(x);
 const y = graph.nn.softmax(graph.matmul(w, w));
  
 const session = tf.session();
-for(let i=0;i<10;i++){
-    let res = session.run(y);
-    console.log(res);
-}
+const res = session.run(y);

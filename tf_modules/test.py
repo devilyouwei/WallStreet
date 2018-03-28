@@ -1,17 +1,25 @@
 import tensorflow as tf
+import numpy as np
 
-hello = tf.constant('Hello, TensorFlow!')
-sess = tf.Session()
-print sess.run(hello)
+x = np.random.rand(100).astype(np.float32)
+y = x*311.3+2.2
 
-a = tf.constant(10)
-b = tf.constant(32)
-print sess.run(a+b)
+w = tf.Variable(tf.random_uniform([1],0.0,4.0))
+b = tf.Variable(tf.zeros([1]))
 
-matrix1 = tf.constant([[3., 3.]])
-matrix2 = tf.constant([[2.],[2.]])
-product = tf.matmul(matrix1, matrix2)
-result = sess.run(product)
-print result
+y_pre = w*x+b
 
-sess.close()
+loss = tf.reduce_mean(tf.square(y_pre-y))
+opt = tf.train.GradientDescentOptimizer(0.1)
+train = opt.minimize(loss)
+
+init = tf.initialize_all_variables()
+
+session = tf.Session()
+
+session.run(init)
+
+for step in range(10000):
+    session.run(train)
+    if step % 100==0:
+        print step,session.run(w),session.run(b)
