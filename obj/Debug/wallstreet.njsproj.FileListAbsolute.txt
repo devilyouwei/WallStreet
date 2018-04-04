@@ -1,0 +1,3 @@
+D:\个人\wallstreet\obj\Debug\wallstreet.njsprojResolveAssemblyReference.cache
+D:\个人\wallstreet\obj\Debug\wallstreet.njsproj.CoreCompileInputs.cache
+D:\个人\wallstreet\bin\Microsoft.NodejsTools.WebRole.dll
