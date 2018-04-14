@@ -15,7 +15,7 @@ import json
 #——————————————————导入数据——————————————————————
 price = []
 try:
-    with open("../dbconfig.json","r") as f:
+    with open("../../dbconfig.json","r") as f:
         dbjson = json.load(f)
         cnn = mysql.connector.connect(**dbjson)
 except mysql.connector.Error as e:
@@ -55,7 +55,7 @@ dataset = scaler.fit_transform(dataset)
 
 
 #分解数据为训练数据和测试数据
-train_size = int(len(dataset) * 0.2)
+train_size = int(len(dataset) * 0.6)
 test_size = len(dataset) - train_size
 train, test = dataset[0:train_size], dataset[train_size:len(dataset)]
 
@@ -68,23 +68,24 @@ testX, testY = create_dataset(test, window)
 trainX = numpy.reshape(trainX, (len(trainX), 1, window))
 testX = numpy.reshape(testX, (len(testX), 1, window))
 
-# create and fit the LSTM network
+# 创建RNN
 model = Sequential()
 model.add(LSTM(128, input_shape=(1, window)))
 model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
 model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
 
-# make predictions
+# 预测
 trainPredict = model.predict(trainX)
 testPredict = model.predict(testX)
 
-# invert predictions
+# 处理预测值
 trainPredict = scaler.inverse_transform(trainPredict)
 trainY = scaler.inverse_transform([trainY])
 testPredict = scaler.inverse_transform(testPredict)
 testY = scaler.inverse_transform([testY])
 
+#评估模型
 trainScore = math.sqrt(mean_squared_error(trainY[0], trainPredict[:,0]))
 print('Train Score: %.2f RMSE' % (trainScore))
 testScore = math.sqrt(mean_squared_error(testY[0], testPredict[:,0]))

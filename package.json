@@ -13,6 +13,7 @@
     "formidable": "latest",
     "htmlspecialchars": "latest",
     "trim": "latest",
-    "tensorflow2": "latest"
+    "tensorflow2": "latest",
+    "child_process": "latest"
   }
 }

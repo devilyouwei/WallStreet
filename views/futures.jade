@@ -34,6 +34,14 @@ block body
                             label.am-u-sm-5.am-form-label 天数
                             div.am-u-sm-7
                                 input(type="number" id="day_num" style="width:100%").am-input
+                    li
+                        div.predict
+                            h3.am-text-right 下一天预测
+                            p.am-text-warning 期货有风险，投资需谨慎，预测仅供参考
+                            p#pre_data 正在预测中...
+                            p.am-hide#now_data
+                            p#percent_size
+
 
             //右部可视化数据图
             div.am-u-sm-9.right

@@ -14,6 +14,7 @@ $(function(){
     let $g_name = $("h1.am-text-center").text();
     //默認檢索十天数据
     init_data_paint($g_id,10,$chart_cate.val());
+    get_predict_data($g_id);
     //修改限制条数
     $limit.on("change",function(){
         init_data_paint($g_id,$limit.val(),$chart_cate.val());
@@ -22,6 +23,20 @@ $(function(){
     $chart_cate.on("change",function(){
         init_data_paint($g_id,$limit.val(),$chart_cate.val());
     });
+
+    function get_predict_data(g_id){
+        let url="/futures/predict/"+g_id;
+        $.get(url,function(res){
+            if(res.status){
+                $("#pre_data").text("预测值："+res.data);
+                let now_data = $("#now_data").text();
+                let percent = (res.data-now_data)/now_data
+                $("#percent_size").text("涨幅比："+percent)
+            }else{
+                alert(res.msg);
+            }
+        });
+    }
 
     //请求加载数据
     function init_data_paint(g_id,limit,chart){
@@ -55,6 +70,7 @@ $(function(){
                     date.push(data[i].date);
                     volume.push(data[i].volume);
                 }
+                $("#now_data").text(max_price[max_price.length-1]);
                 //综合k线
                 paint_kline(chart0,date,open_price,latest_price,min_price,max_price,$g_name);
                 switch(chart){

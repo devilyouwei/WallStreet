@@ -7,6 +7,7 @@ div
                 th 数据量
                 th 开始时间
                 th 最终时间
+                th 操作
         tbody
             each item in goods
                 tr
@@ -15,3 +16,5 @@ div
                     td=item.count
                     td=item.oldest_date
                     td=item.newest_date
+                    td
+                        button.train_btn.am-btn.am-btn-sm.am-btn-success(href="/admin/data/train/#{item.id}") 训练

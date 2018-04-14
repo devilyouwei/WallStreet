@@ -39,6 +39,7 @@ init.controller = function(app){
     app.get("/admin/users/add",Filter.sessionAuth,Admin.users_add);
     app.get("/admin/users/del/:id",Filter.sessionAuth,Admin.users_del);
     app.get("/admin/data/spider",Filter.sessionAuth,Admin.data_spider);
+    app.get("/admin/data/train/:id",Filter.sessionAuth,Admin.data_train);
     app.get("/admin/load/goods/:id",Filter.sessionAuth,Admin.load_goods);
     app.get("/admin/logout",Filter.sessionAuth,Admin.logout);
     //首页查询
@@ -47,6 +48,7 @@ init.controller = function(app){
     app.get("/futures/:id",Futures.index);
     //ajax
     app.get("/futures/data/:id/:limit",Futures.data); 
+    app.get("/futures/predict/:id/",Futures.predict); 
 
     //post请求
     app.post("/login",Login.login);

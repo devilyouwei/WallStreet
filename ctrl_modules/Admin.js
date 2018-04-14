@@ -3,6 +3,7 @@ const formidable = require("formidable");
 const trim = require("trim");
 const md5 = require("md5")
 const htmlspecialchars = require("htmlspecialchars");
+const exec = require("child_process").exec;
 require("./Date.js");
 
 //必须使用对象工厂函数，每次请求都要新建promise对象，否则类中static方法将导致导致数据未刷新
@@ -251,6 +252,21 @@ class Admin{
             results[i].count_goods = (await query(sql2,results[i].id))[0].count;
         }
         res.render("admin_data_spider",{cates:results});
+    }
+
+    //训练模型控制器
+    static async data_train(req,res,next){
+        let g_id = parseInt(req.params.id);
+        let cmd = "python tf_modules/train_model.py "+g_id;
+
+        //运行python文件训练
+        exec(cmd,function(error,stdout,stderr){
+            if(error) {
+                return res.json({status:0,msg:'stderr : '+stderr});
+            }
+            console.log(stdout);
+            return res.json({status:1,msg:'训练完成！'});
+        })
     }
 
     static async load_goods(req,res,next){
