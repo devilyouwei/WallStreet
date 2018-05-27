@@ -1,4 +1,4 @@
-import mysql.connector
+import pymysql
 import json
 import numpy
 #数据转换为矩阵
@@ -17,8 +17,8 @@ def get_data(g_id):
     try:
         with open("dbconfig.json","r") as f:
             dbjson = json.load(f)
-            cnn = mysql.connector.connect(**dbjson)
-    except mysql.connector.Error as e:
+            cnn = pymysql.Connect(**dbjson)
+    except pymysql.Error as e:
         print('connect failed!{}'.format(e))
 
     cursor = cnn.cursor()

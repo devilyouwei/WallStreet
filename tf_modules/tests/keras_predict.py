@@ -7,7 +7,7 @@ from keras.layers import Dense
 from keras.layers import LSTM
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
-import mysql.connector
+import pymysql
 import os
 import numpy as np
 import json
@@ -17,8 +17,8 @@ price = []
 try:
     with open("../../dbconfig.json","r") as f:
         dbjson = json.load(f)
-        cnn = mysql.connector.connect(**dbjson)
-except mysql.connector.Error as e:
+        cnn = pymysql.Connect(**dbjson)
+except pymysql.Error as e:
     print('connect failed!{}'.format(e))
 
 cursor = cnn.cursor()
@@ -73,7 +73,7 @@ model = Sequential()
 model.add(LSTM(128, input_shape=(1, window)))
 model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
+model.fit(trainX, trainY, epochs=100, batch_size=100, verbose=2)
 
 # 预测
 trainPredict = model.predict(trainX)
