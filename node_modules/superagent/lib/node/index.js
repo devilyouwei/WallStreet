@@ -25,6 +25,7 @@ const zlib = require('zlib');
 const util = require('util');
 const pkg = require('../../package.json');
 const RequestBase = require('../request-base');
+const CookieJar = require('cookiejar');
 
 function request(method, url) {
   // callback
@@ -654,13 +655,22 @@ Request.prototype.request = function(){
   if (this.username && this.password) {
     this.auth(this.username, this.password);
   }
-
-  // add cookies
-  if (this.cookies) req.setHeader('Cookie', this.cookies);
-
   for (const key in this.header) {
     if (this.header.hasOwnProperty(key))
       req.setHeader(key, this.header[key]);
+  }
+
+  // add cookies
+  if (this.cookies) {
+    if(this.header.hasOwnProperty('cookie')) {
+      // merge
+      const tmpJar = new CookieJar.CookieJar();
+      tmpJar.setCookies(this.header.cookie.split(';'));
+      tmpJar.setCookies(this.cookies.split(';'));
+      req.setHeader('Cookie',tmpJar.getCookies(CookieJar.CookieAccessInfo.All).toValueString());
+    } else {
+      req.setHeader('Cookie', this.cookies);
+    }
   }
 
   return req;
@@ -942,6 +952,47 @@ Request.prototype._end = function() {
 
   this.emit('request', this);
 
+  const getProgressMonitor = () => {
+    const lengthComputable = true;
+    const total = req.getHeader('Content-Length');
+    let loaded = 0;
+
+    const progress = new Stream.Transform();
+    progress._transform = (chunk, encoding, cb) => {
+      loaded += chunk.length;
+      this.emit('progress', {
+        direction: 'upload',
+        lengthComputable,
+        loaded,
+        total,
+      });
+      cb(null, chunk);
+    };
+    return progress;
+  };
+
+  const bufferToChunks = (buffer) => {
+    const chunkSize = 16 * 1024; // default highWaterMark value
+    const chunking = new Stream.Readable();
+    const totalLength = buffer.length;
+    const remainder = totalLength % chunkSize;
+    const cutoff = totalLength - remainder;
+
+    for (let i = 0; i < cutoff; i += chunkSize) {
+      const chunk = buffer.slice(i, i + chunkSize);
+      chunking.push(chunk);
+    }
+
+    if (remainder > 0) {
+      const remainderBuffer = buffer.slice(-remainder);
+      chunking.push(remainderBuffer);
+    }
+
+    chunking.push(null); // no more data
+
+    return chunking;
+  }
+
   // if a FormData instance got created, then we send that as the request body
   const formData = this._formData;
   if (formData) {
@@ -961,27 +1012,11 @@ Request.prototype._end = function() {
       if ('number' == typeof length) {
         req.setHeader('Content-Length', length);
       }
-
-      const getProgressMonitor = () => {
-        const lengthComputable = true;
-        const total = req.getHeader('Content-Length');
-        let loaded = 0;
-
-        const progress = new Stream.Transform();
-        progress._transform = (chunk, encoding, cb) => {
-          loaded += chunk.length;
-          this.emit('progress', {
-            direction: 'upload',
-            lengthComputable,
-            loaded,
-            total,
-          });
-          cb(null, chunk);
-        };
-        return progress;
-      };
+      
       formData.pipe(getProgressMonitor()).pipe(req);
     });
+  } else if (Buffer.isBuffer(data)) {
+    bufferToChunks(data).pipe(getProgressMonitor()).pipe(req);
   } else {
     req.end(data);
   }

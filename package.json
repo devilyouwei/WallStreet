@@ -3,17 +3,17 @@
   "description": "a software to comprehend Big financial data",
   "version": "0.0.1",
   "dependencies": {
-    "express": "latest",
-    "mysql": "latest",
+    "child_process": "latest",
+    "cookie-parser": "latest",
+    "express": "^4.16.3",
+    "express-session": "latest",
+    "formidable": "^1.2.1",
+    "htmlspecialchars": "latest",
     "jade": "latest",
     "md5": "latest",
-    "express-session": "latest",
-    "cookie-parser": "latest",
-    "superagent": "latest",
-    "formidable": "latest",
-    "htmlspecialchars": "latest",
-    "trim": "latest",
+    "mysql": "latest",
+    "superagent": "^3.8.3",
     "tensorflow2": "latest",
-    "child_process": "latest"
+    "trim": "latest"
   }
 }
