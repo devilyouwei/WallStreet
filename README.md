@@ -11,7 +11,7 @@
 
 ## 安装
 1. 将项目中wallstreet.sql导入MySQL数据库
-（注意视图可能导致The user specified as a definer (”@’%') does not exist错误，详见博客：http://blog.handone.com/index.php/archives/137）
+（注意视图可能导致The user specified as a definer (”@’%') does not exist错误，详见博客：http://blog.handone.com/index.php/archives/137
 2. 修改dbconfig.json配置数据库连接参数
 3. 安装python项目所需基本库tensorflow，keras，pandas，pymysql，sklearn，matplotlib
 
