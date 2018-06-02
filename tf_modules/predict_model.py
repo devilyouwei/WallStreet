@@ -1,3 +1,4 @@
+# 该文件已经被废弃，现在对数据的预测是在浏览器端tfjs实现的
 from keras.models import load_model
 import sys
 import myfunc as func

@@ -1,19 +1,20 @@
 {
   "name": "WallStreet",
   "description": "a software to comprehend Big financial data",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": {
     "child_process": "latest",
     "cookie-parser": "latest",
-    "express": "^4.16.3",
+    "express": "latest",
     "express-session": "latest",
-    "formidable": "^1.2.1",
+    "formidable": "latest",
     "htmlspecialchars": "latest",
     "jade": "latest",
     "md5": "latest",
     "mysql": "latest",
-    "superagent": "^3.8.3",
+    "superagent": "latest",
     "tensorflow2": "latest",
-    "trim": "latest"
+    "trim": "latest",
+    "@tensorflow/tfjs": "latest"
   }
 }

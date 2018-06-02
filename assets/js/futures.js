@@ -24,7 +24,29 @@ $(function(){
         init_data_paint($g_id,$limit.val(),$chart_cate.val());
     });
 
-    function get_predict_data(g_id){
+    async function get_predict_data(g_id){
+        //深度学习预测
+        let model = await tf.loadModel(`/tf_models/${g_id}/model.json`)
+        let response = await fetch(`/futures/data/${g_id}/30`);
+        let data = (await response.json()).data;
+        let max_price = [];
+        for(let i in data){
+            max_price.push(data[i].max_price);
+        }
+        scaler = new min_max_scale(max_price);
+        max_price = scaler.fit(max_price);
+        let tf_price = tf.tensor3d(max_price,[1,1,30]);
+        let prediction = model.predict(tf_price);
+        let a = (await prediction.data())[0];
+        a = scaler.inverse(a);
+
+        $("#pre_data").text("预测值："+a);
+        let now_data = $("#now_data").text();
+        let percent = (a-now_data)/now_data
+        $("#percent_size").text("涨幅比："+percent)
+    }
+    //老方法，交给后端python预测，已废弃，作为参考
+    function get_predict_data_old(g_id){
         let url="/futures/predict/"+g_id;
         $.get(url,function(res){
             if(res.status){
@@ -38,6 +60,19 @@ $(function(){
         });
     }
 
+    //对一维归一化
+    function min_max_scale(data){
+        this.max = Math.max(...data);
+        this.min = Math.min(...data);
+        this.fit = function(){
+            for(i in data){
+                data[i] = (data[i]-this.min)/(this.max-this.min);
+            }
+            return data;
+        }
+        this.inverse = (to_inverse) => to_inverse*(this.max-this.min)+this.min
+        
+    }
     //请求加载数据
     function init_data_paint(g_id,limit,chart){
         chart0.showLoading();
