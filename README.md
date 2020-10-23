@@ -1,6 +1,10 @@
 # WallStreet(华尔街)
 **爬取金融变化，进行风险预测，价格走势预测的大数据系统，中文名“华尔街”**
 
+**停止维护**
+
+参考新版：[New-WallStreet](https://github.com/devilyouwei/WallStreet-New)
+
 # 部署
 
 ## 基本工具
